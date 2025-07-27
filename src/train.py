@@ -4,6 +4,7 @@ import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+import matplotlib.pyplot as plt 
 
 from dataset import LEVIRCDDataset as ChangeDetectionDataset
 from model import UNet
@@ -26,7 +27,7 @@ def train(
     model = UNet(in_channels=6, out_channels=1).to(device)
 
     # Loss and optimizer
-    criterion = nn.BCELoss()
+    criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     for epoch in range(1, epochs + 1):
@@ -52,7 +53,8 @@ def train(
 
         # Save checkpoint
         torch.save(model.state_dict(), f'model_epoch_{epoch}.pth')
-
+    return model, val_loader 
+    
 def validate(model, val_loader, device):
     model.eval()
     criterion = nn.BCELoss()
@@ -68,3 +70,7 @@ def validate(model, val_loader, device):
 
     avg_val_loss = val_loss / len(val_loader)
     print(f'Validation Loss: {avg_val_loss:.4f}')
+
+
+
+

@@ -29,6 +29,7 @@ class LEVIRCDDataset(Dataset):
         a_img = self.to_tensor(a_img)
         b_img = self.to_tensor(b_img)
         label = self.to_tensor(label)
+        label = (label > 0.5).float()
 
         return a_img, b_img, label
     
