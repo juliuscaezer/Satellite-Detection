@@ -27,7 +27,7 @@ def train(
     model = UNet(in_channels=6, out_channels=1).to(device)
 
     # Loss and optimizer
-    criterion = nn.BCEWithLogitsLoss()
+    criterion = nn.BCELoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
     for epoch in range(1, epochs + 1):

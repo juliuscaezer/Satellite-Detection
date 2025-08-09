@@ -16,7 +16,7 @@ def visualize_sample(model, dataloader, device):
             # Concatenate A and B for input
             input_img = torch.cat([a_img, b_img], dim=1)
             output = model(input_img)
-            output = torch.sigmoid(output)  # If using BCEWithLogitsLoss
+            output = torch.sigmoid(output)  # If using BCELoss
             output = (output > 0.5).float()
 
             # Convert to CPU numpy arrays for plotting
