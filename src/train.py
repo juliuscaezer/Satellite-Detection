@@ -37,10 +37,11 @@ def train(
         loop = tqdm(train_loader, desc=f'Epoch [{epoch}/{epochs}]')
         for img1, img2, mask in loop:
             inputs = torch.cat([img1, img2], dim=1).to(device)  # shape: [B, 6, H, W]
-            mask = mask.to(device)
+            mask = mask.float().to(device) # Explicitly type-casted to float to make sure it works with BCE Loss
 
             optimizer.zero_grad()
             outputs = model(inputs)
+            outputs = torch.sigmoid(outputs) # This is added because BCE Loss is used 
             loss = criterion(outputs, mask)
             loss.backward()
             optimizer.step()
@@ -65,6 +66,7 @@ def validate(model, val_loader, device):
             inputs = torch.cat([img1, img2], dim=1).to(device)
             mask = mask.to(device)
             outputs = model(inputs)
+            outputs = torch.sigmoid(outputs) # This is added because BCE Loss is used 
             loss = criterion(outputs, mask)
             val_loss += loss.item()
 
